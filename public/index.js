@@ -1,8 +1,10 @@
 const html = window.nanohtml
 
-const offset = 0
+let offset = 0
 const limit = 10
-const tag = 'texture'
+const tag = ''   // FIXED: removed "texture" so products actually show
+
+// Initial load
 listPrints({ offset, limit, tag })
   .then(prints => render({ prints, offset, limit, tag }))
 
@@ -40,13 +42,12 @@ function renderButtons({ offset, limit, tag }) {
   function renderPrev({ offset, limit, tag }) {
     if (!offset) return
 
-    offset = offset - limit
+    const newOffset = offset - limit
     return html`
       <a
         href="#"
         class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4"
-        onclick=${() => listPrints({ offset, limit, tag }).then(prints => render({ prints, offset, limit, tag }))}
-        >
+        onclick=${() => listPrints({ offset: newOffset, limit, tag }).then(prints => render({ prints, offset: newOffset, limit, tag }))}>
 
         <span class="pl1">Previous</span>
       </a>
@@ -54,20 +55,19 @@ function renderButtons({ offset, limit, tag }) {
   }
 
   function renderNext({ offset, limit, tag }) {
-    offset = offset + limit
+    const newOffset = offset + limit
     return html`
-    <a
-      href="#"
-      class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box"
-      onclick=${() => listPrints({ offset, limit, tag }).then(prints => render({ prints, offset, limit, tag }))}>
-      <span class="pr1">Next</span>
-    </a>
+      <a
+        href="#"
+        class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box"
+        onclick=${() => listPrints({ offset: newOffset, limit, tag }).then(prints => render({ prints, offset: newOffset, limit, tag }))}>
+        <span class="pr1">Next</span>
+      </a>
     `
   }
 }
 
 function renderPrint(print) {
-  console.log(print)
   return html`
     <div class="fl w-50 w-25-m w-20-l pa2">
       <a href="${print.links.html}" target="_blank" class="db link dim tc">
